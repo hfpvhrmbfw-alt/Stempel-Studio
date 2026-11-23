@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Druckfertige Stempeldateien aus Text oder eigener Zeichnung erstellen: SVG, PDF und PNG mit 600 dpi.">
+<title>Stempel-Studio</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="theme-color" content="#E3DAD3">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="runhead"><div class="wrap cap"><span>Stempel-Studio · Werkzeug</span><span id="status">Version 1</span></div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Stempel-Studio</h1>
+    <div class="subtitle cap">Text<span class="sep">·</span>Bild<span class="sep">·</span>Druckdatei</div>
+    <p class="lede">Gestalte deinen Stempel und lade eine druckfertige Datei für deinen Stempelhersteller herunter. Alles bleibt auf deinem Gerät.</p>
+  </section>
+  <hr class="rule-heavy">
+
+  <div class="studio">
+    <form id="form" class="controls" autocomplete="off" onsubmit="return false">
+      <section class="section">
+        <h2 class="label"><span class="no">№ 01</span> — Motiv</h2>
+        <div class="choices" id="motif" role="radiogroup" aria-label="Motivtyp"></div>
+        <div class="field"><label for="name">Name für die Dateien</label>
+          <input id="name" maxlength="60" placeholder="z. B. bloomnow">
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="label"><span class="no">№ 02</span> — Form und Größe</h2>
+        <div class="choices" id="shape" role="radiogroup" aria-label="Form"></div>
+        <div class="field"><label for="preset">Gängige Größe</label><select id="preset"></select></div>
+        <div class="pair">
+          <div class="field"><label for="width">Breite in mm</label><input id="width" type="number" min="10" max="150" step="0.5" inputmode="decimal"></div>
+          <div class="field" id="heightField"><label for="height">Höhe in mm</label><input id="height" type="number" min="10" max="150" step="0.5" inputmode="decimal"></div>
+        </div>
+        <p class="hint">Maße sind das Innenmaß der Stempelplatte. Bitte mit deinem Hersteller bzw. Stempelmodell abgleichen.</p>
+      </section>
+
+      <section class="section">
+        <h2 class="label"><span class="no">№ 03</span> — Text</h2>
+        <div id="ringFields">
+          <div class="field"><label for="ringTop">Ringtext oben</label><input id="ringTop" maxlength="80"></div>
+          <div class="field"><label for="ringBottom">Ringtext unten</label><input id="ringBottom" maxlength="80"></div>
+        </div>
+        <div class="field"><label for="lines" id="linesLabel">Zeilen (eine pro Zeile, höchstens 5)</label>
+          <textarea id="lines" rows="4"></textarea>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="label"><span class="no">№ 04</span> — Bild</h2>
+        <p class="hint">Am besten eine klare Strichzeichnung oder ein Logo auf hellem Grund. Fotos vorher zu einer Strichgrafik vereinfachen.</p>
+        <div class="field"><label for="file">Bild hochladen (PNG, JPG)</label><input id="file" type="file" accept="image/png,image/jpeg,image/webp"></div>
+        <div id="imageControls" hidden>
+          <div class="row"><span id="imageName"></span><button type="button" class="btn" id="removeImage">Bild entfernen</button></div>
+          <div class="field"><label for="threshold">Schwelle: <span id="thresholdValue"></span></label><input id="threshold" type="range" min="1" max="254"></div>
+          <div class="field"><label for="imgScale">Bildgröße: <span id="imgScaleValue"></span></label><input id="imgScale" type="range" min="30" max="100"></div>
+          <label class="check"><input type="checkbox" id="invert"><span>Hell und dunkel tauschen</span></label>
+          <label class="check"><input type="checkbox" id="thicken"><span>Dünne Linien verstärken und enge Lücken schließen</span></label>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="label"><span class="no">№ 05</span> — Stil</h2>
+        <div class="choices" id="style" role="radiogroup" aria-label="Stil"></div>
+        <label class="check"><input type="checkbox" id="border"><span>Rahmen</span></label>
+        <div class="field"><label for="ink">Farbe der PNG-Vorschau</label>
+          <select id="ink"><option value="#000000">Schwarz</option><option value="#C8102E">Rot</option><option value="#1F3A93">Blau</option><option value="#2B6B3A">Grün</option></select>
+        </div>
+        <label class="check"><input type="checkbox" id="mirror"><span>Druckdatei spiegeln (nur, wenn dein Hersteller das verlangt)</span></label>
+      </section>
+    </form>
+
+    <aside class="preview" aria-live="polite">
+      <figure>
+        <div class="stage" id="stage"></div>
+        <figcaption><b>ABB. 01</b><span id="caption"></span></figcaption>
+      </figure>
+      <div id="notes"></div>
+
+      <section class="section">
+        <h2 class="label"><span class="no">№ 06</span> — Herunterladen</h2>
+        <label class="check"><input type="checkbox" id="rights"><span>Ich habe die Rechte an Bild, Logo und Text. Es ist kein amtliches Siegel und kein Behördenstempel.</span></label>
+        <div class="buttons">
+          <button type="button" class="btn primary" id="dlPdf" disabled>PDF</button>
+          <button type="button" class="btn primary" id="dlSvg" disabled>SVG</button>
+          <button type="button" class="btn" id="dlPng" disabled>PNG 600 dpi</button>
+          <button type="button" class="btn" id="dlInfo" disabled>Infozeile</button>
+        </div>
+        <p class="hint mono" id="info"></p>
+      </section>
+
+      <section class="section">
+        <h2 class="label"><span class="no">№ 07</span> — Entwurf</h2>
+        <div class="buttons">
+          <button type="button" class="btn" id="saveDraft">Entwurf speichern</button>
+          <label class="btn" for="loadDraft">Entwurf laden</label>
+          <input type="file" id="loadDraft" accept="application/json,.json" hidden>
+          <button type="button" class="btn" id="reset">Neu anfangen</button>
+        </div>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<footer><div class="wrap cap"><span>Stempel-Studio · Freie Software (GPL-3.0)</span><a href="https://github.com/hfpvhrmbfw-alt/stempel-studio">Quellcode</a></div></footer>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
