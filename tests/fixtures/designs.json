@@ -1,0 +1,7 @@
+[
+  { "name": "wort-klassisch", "design": { "motif": "wort", "shape": "rechteck", "widthMm": 47, "heightMm": 18, "style": "klassisch", "border": true, "lines": ["ERLEDIGT"] } },
+  { "name": "adresse-modern", "design": { "motif": "adresse", "shape": "rechteck", "widthMm": 58, "heightMm": 22, "style": "modern", "border": false, "lines": ["Anna Beispiel", "Musterstraße 12", "80331 München"] } },
+  { "name": "siegel-kreis", "design": { "motif": "siegel", "shape": "kreis", "widthMm": 40, "heightMm": 40, "style": "klassisch", "border": true, "lines": ["Bloom", "Now"], "ringTop": "STEMPEL-STUDIO", "ringBottom": "MÜNCHEN · 2026" } },
+  { "name": "siegel-oval-lang", "expectNote": "schrift_klein", "design": { "motif": "siegel", "shape": "oval", "widthMm": 50, "heightMm": 30, "style": "modern", "border": true, "lines": ["Mitte"], "ringTop": "Ein sehr langer Ringtext, der nicht auf einen Halbbogen passt", "ringBottom": "unten" } },
+  { "name": "wort-quadrat", "design": { "motif": "wort", "shape": "quadrat", "widthMm": 20, "heightMm": 20, "style": "modern", "border": true, "lines": ["OK"] } }
+]
