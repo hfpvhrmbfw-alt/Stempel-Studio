@@ -24,6 +24,19 @@ npx serve .        # oder: python3 -m http.server
 
 Veröffentlicht wird sie über GitHub Pages (Branch `main`, Ordner `/`).
 
+## Kommandozeile und Claude-Skill
+
+`tools/stempel.mjs` nutzt denselben Kern ohne Browser (nur Node ≥ 18):
+
+```sh
+node tools/stempel.mjs build design.json --image zeichnung.png --out ausgabe/   # Stempel bauen, prüfen, exportieren
+node tools/stempel.mjs check eigen.svg --shape kreis                             # eigene SVG prüfen
+node tools/stempel.mjs export eigen.svg --shape kreis --name motiv --out ausgabe/
+node tools/stempel.mjs text --font schrift.ttf --size 4 --x 20 --y 10 --anchor middle "Text"
+```
+
+`skill/SKILL.md` macht daraus einen Claude-Skill: Claude gestaltet den Stempel (auch Sonderfälle wie Hanko oder eigene Anordnungen) und nutzt die Kommandozeile für Vektorisierung, Prüfung und Export. `sh tools/skill-paket.sh` baut `stempel-studio-skill.zip` (SKILL.md plus Engine) zum Hochladen in ein beliebiges Claude-Konto.
+
 ## Tests
 
 ```sh
